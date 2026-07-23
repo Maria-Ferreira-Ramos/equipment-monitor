@@ -19,3 +19,7 @@ def create_equipment(equipment: schemas.EquipmentCreate, db: Session = Depends(g
     db.commit()
     db.refresh(db_equipment)
     return db_equipment
+
+@app.get("/equipment", response_model=list[schemas.EquipmentOut])
+def list_equipment(db: Session = Depends(get_db)):
+    return db.query(models.Equipment).all()
