@@ -14,14 +14,14 @@ class Equipment(Base):
 
     readings = relationship("Reading", back_populates="equipment")
 
-    class Reading(Base):
-        __tablename__ = "readings"
+class Reading(Base):
+    __tablename__ = "readings"
 
-        id = Column(Integer, primary_key=True, index=True)
-        equipment_id = Column(Integer, ForeignKey("equipment.id"), nullable=False)
-        value = Column(Float, nullable=False)
-        unit = Column(String, nullable=False)
-        timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    id = Column(Integer, primary_key=True, index=True)
+    equipment_id = Column(Integer, ForeignKey("equipment.id"), nullable=False)
+    value = Column(Float, nullable=False)
+    unit = Column(String, nullable=False)
+    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-        equipment = relationship("Equipment", back_populates="readings")
+    equipment = relationship("Equipment", back_populates="readings")
         
