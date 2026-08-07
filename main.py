@@ -36,3 +36,33 @@ def add_reading(equipment_id: int, reading: schemas.ReadingCreate, db: Session =
     db.commit()
     db.refresh(db_reading)
     return db_reading
+
+@app.get("/equipment/{equipment_id}/status", response_model=schemas.EquipmentStatus)
+def get_status(equipment_id: int, db: Session = Depends(get_db)):
+    equipment = db.query(models.Equipment).filter(models.Equipment.id == equipment_id).first()
+    if not equipment:
+        raise HTTPException(status_code=404, detail="Equipment not found")
+    latest = (
+        db.query(models.Reading)
+        .filter(models.Reading.equipment_id == equipment_id)
+        .order_by(models.Reading.timestamp.desc())
+        .first()
+    )
+
+    if not latest:
+        return schemas.EquipmentStatus(
+            equipment_id=equipment_id,
+            name=equipment.name,
+            latest_value=None,
+            unit=None,
+            is_anomalous=False
+        )
+    is_anomalous = latest.value < equipment.min_expected or latest.value > equipment.max_expected
+
+    return schemas.EquipmentStatus(
+        equipment_id=equipment_id,
+        name=equipment.name,
+        latest_value=latest.value,
+        unit=latest.unit,
+        is_anomalous=is_anomalous
+    )

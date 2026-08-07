@@ -23,4 +23,12 @@ class ReadingOut(ReadingCreate):
     class Config:
         from_attributes = True
 
+class EquipmentStatus(BaseModel):
+    equipment_id: int
+    name: str
+    latest_value: float | None
+    unit: str | None
+    is_anomalous: bool
+    
+
 
