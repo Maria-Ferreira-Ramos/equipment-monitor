@@ -47,3 +47,33 @@ def test_create_equipment():
     data = response.json()
     assert data["name"] == "Pump-1"
     assert data["id"] == 1
+
+def test_add_reading_to_nonexistent_equipment_returns_404():
+    response = client.post("/equipment/999/readings", json={"value":50.0, "unit": "psi"})
+    assert response.status_code == 404
+
+def test_status_flags_anomaly_above_range():
+    equipment_response = client.post(
+        "/equipment",
+        json={"name": "Compressor-A", "equipment_type": "compressor", "min_expected": 100.0, "max_expected": 200.0},
+    )
+
+    equipment_id = equipment_response.json()["id"]
+
+    client.post(f"/equipment/{equipment_id}/readings", json={"value": 250.0, "unit": "psi"})
+
+    status_response = client.get(f"/equipment/{equipment_id}/status")
+    assert status_response.status_code == 200
+    assert status_response.json()["is_anomalous"] is True
+
+def test_status_normal_reading_not_flagged():
+    equipment_response = client.post(
+        "/equipment",
+        json={"name": "Compressor-B", "equipment_type": "compressor", "min_expected": 100.0, "max_expected": 200.0},
+    )
+    equipment_id = equipment_response.json()["id"]
+
+    client.post(f"/equipment/{equipment_id}/readings", json={"value": 150.0, "unit": "psi"})
+
+    status_response = client.get(f"/equipment/{equipment_id}/status")
+    assert status_response.json()["is_anomalous"] is False
