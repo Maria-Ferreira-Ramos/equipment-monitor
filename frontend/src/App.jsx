@@ -15,7 +15,7 @@ function App() {
     <div>
       <h1>Equipment Monitoring Dashboard</h1>
       {equipmentList.map((eq) => (
-        <p key={eq.id}>{eq.name} </p>
+        <StatusCard key={eq.id} equipmentID={eq.id} name={eq.name} />
       ))}
     </div>
   );
