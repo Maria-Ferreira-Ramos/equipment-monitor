@@ -15,9 +15,11 @@ function StatusCard({equipmentID, name}) {
     
     return (
 
-        <div>
+        <div className={`card ${status.is_anomalous ? "anomalous" : "normal"}`}>
             <h3>{status.name} </h3>
-            <p>{status.latest_value !== null ? `${status.latest_value} ${status.unit}` : "No readings yet"}</p>
+            <p className="value">
+                {status.latest_value !== null ? `${status.latest_value} ${status.unit}` : "No readings yet"}
+            </p>
             <p>{status.is_anomalous ? "Anomaly detected" : "Normal"} </p>
         </div>
     );

@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react";
 import StatusCard from "./StatusCard";
+import "./App.css"
 
 function App() {
   const [equipmentList, setEquipmentList] = useState([]);
@@ -12,11 +13,13 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="app">
       <h1>Equipment Monitoring Dashboard</h1>
-      {equipmentList.map((eq) => (
-        <StatusCard key={eq.id} equipmentID={eq.id} name={eq.name} />
-      ))}
+      <div className="grid">
+        {equipmentList.map((eq) => (
+          <StatusCard key={eq.id} equipmentID={eq.id} name={eq.name} />
+        ))}
+      </div>
     </div>
   );
 }
