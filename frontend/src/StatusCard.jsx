@@ -1,10 +1,11 @@
 import {useState, useEffect} from "react";
+import {API_BASE_URL} from "./api";
 
 function StatusCard({equipmentID, name}) {
     const [status, setStatus] = useState(null);
 
     useEffect(()=> {
-        fetch(`http://127.0.0.1:8000/equipment/${equipmentID}/status`)
+        fetch(`${API_BASE_URL}/equipment/${equipmentID}/status`)
         .then((response) => response.json())
         .then((data) => setStatus(data));
     }, [equipmentID]);

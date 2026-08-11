@@ -1,12 +1,13 @@
 import {useState, useEffect} from "react";
 import StatusCard from "./StatusCard";
 import "./App.css"
+import {API_BASE_URL} from "./api";
 
 function App() {
   const [equipmentList, setEquipmentList] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/equipment")
+    fetch(`${API_BASE_URL}/equipment`)
       .then((response) => response.json())
       .then((data) => setEquipmentList(data));
 
