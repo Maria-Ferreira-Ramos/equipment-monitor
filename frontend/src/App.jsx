@@ -22,11 +22,13 @@ function App() {
   return (
     <div className="app">
       <h1>Equipment Monitoring Dashboard</h1>
+      <div className="layout">
       <AddEquipmentForm onEquipmentAdded={fetchEquipmentList} />
-      <div className="grid">
-        {equipmentList.map((eq) => (
-          <StatusCard key={eq.id} equipmentID={eq.id} name={eq.name} />
-        ))}
+        <div className="grid">
+          {equipmentList.map((eq) => (
+            <StatusCard key={eq.id} equipmentID={eq.id} name={eq.name} />
+          ))}
+        </div>
       </div>
     </div>
   );

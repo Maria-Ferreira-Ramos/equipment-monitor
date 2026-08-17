@@ -3,12 +3,39 @@ import {API_BASE_URL} from "./api";
 
 function StatusCard({equipmentID, name}) {
     const [status, setStatus] = useState(null);
+    const [readingValue, setReadingValue] = useState("");
+    const [readingUnit, setReadingUnit] = useState("");
 
-    useEffect(()=> {
+    function fetchStatus() {
         fetch(`${API_BASE_URL}/equipment/${equipmentID}/status`)
         .then((response) => response.json())
         .then((data) => setStatus(data));
+    }
+
+    useEffect(()=> {
+        fetchStatus();
+        const interval = setInterval(fetchStatus, 5000);
+        return () => clearInterval(interval);
     }, [equipmentID]);
+
+    function handleAddReading(event) {
+        event.preventDefault();
+        fetch(`${API_BASE_URL}/equipment/${equipmentID}/readings`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                value: parseFloat(readingValue),
+                unit: readingUnit,
+            }),
+        })
+
+        .then((response) => response.json())
+        .then(() => {
+            setReadingValue("")
+            setReadingUnit("")
+            fetchStatus();
+        });
+    }
 
     if (!status) {
         return <p>Loading {name}...</p>;
@@ -22,6 +49,28 @@ function StatusCard({equipmentID, name}) {
                 {status.latest_value !== null ? `${status.latest_value} ${status.unit}` : "No readings yet"}
             </p>
             <p>{status.is_anomalous ? "Anomaly detected" : "Normal"} </p>
+
+            <form onSubmit={handleAddReading} className="reading-form">
+                <input 
+                    type="number"
+                    step="any"
+                    placeholder="Value"
+                    value={readingValue}
+                    onChange={(e) => setReadingValue(e.target.value)}
+                    required
+                />
+
+                <input 
+                    text="text"
+                    placeholder="Unit"
+                    value={readingUnit}
+                    onChange={(e) => setReadingUnit(e.target.value)}
+                    required
+                />
+
+                <button type="submit">Log</button>
+
+            </form>
         </div>
     );
 }
