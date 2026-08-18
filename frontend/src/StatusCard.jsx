@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react";
 import {API_BASE_URL} from "./api";
+import { Link } from "react-router-dom";
 
 function StatusCard({equipmentID, name}) {
     const [status, setStatus] = useState(null);
@@ -61,7 +62,7 @@ function StatusCard({equipmentID, name}) {
                 />
 
                 <input 
-                    text="text"
+                    type="text"
                     placeholder="Unit"
                     value={readingUnit}
                     onChange={(e) => setReadingUnit(e.target.value)}
@@ -71,6 +72,8 @@ function StatusCard({equipmentID, name}) {
                 <button type="submit">Log</button>
 
             </form>
+
+            <Link to={`/equipment/${equipmentID}/logs`}>View Logs</Link>
         </div>
     );
 }

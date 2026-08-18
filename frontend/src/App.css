@@ -82,3 +82,38 @@
   color: white;
   cursor: pointer;
 }
+
+.logs-table {
+  border-collapse: collapse;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.logs-table th,
+.logs-table td {
+  text-align: left;
+  padding: 0.6rem 1rem;
+}
+
+.logs-table th {
+  background: #37474f;
+  color: white;
+  font-weight: 600;
+}
+
+.logs-table tbody tr{
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.logs-table tbody tr:nth-child(even) {
+  background:#f0f0f0;
+}
+
+.logs-table tbody tr:hover {
+  background: #e3f2fd;
+}

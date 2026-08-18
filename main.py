@@ -75,7 +75,7 @@ def get_status(equipment_id: int, db: Session = Depends(get_db)):
         is_anomalous=is_anomalous
     )
 
-@app.get("/equipment/${equipment_id}/readings", response_model=list[schemas.ReadingOut])
+@app.get("/equipment/{equipment_id}/readings", response_model=list[schemas.ReadingOut])
 def get_readings(equipment_id: int, limit: int = 10, db: Session = Depends(get_db)):
     equipment = db.query(models.Equipment).filter(models.Equipment.id == equipment_id).first()
     if not equipment:
