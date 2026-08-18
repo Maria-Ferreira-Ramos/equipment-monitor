@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class EquipmentCreate(BaseModel):
     name: str
@@ -19,6 +20,7 @@ class ReadingCreate(BaseModel):
 class ReadingOut(ReadingCreate):
     id: int
     equipment_id: int
+    timestamp: datetime
 
     class Config:
         from_attributes = True
