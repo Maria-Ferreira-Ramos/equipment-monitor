@@ -74,3 +74,19 @@ def get_status(equipment_id: int, db: Session = Depends(get_db)):
         unit=latest.unit,
         is_anomalous=is_anomalous
     )
+
+@app.get("/equipment/${equipment_id}/readings", response_model=list[schemas.ReadingOut])
+def get_readings(equipment_id: int, limit: int = 10, db: Session = Depends(get_db)):
+    equipment = db.query(models.Equipment).filter(models.Equipment.id == equipment_id).first()
+    if not equipment:
+        raise HTTPException(status_code=404, detail="Equipment not found")
+
+    readings = (
+        db.query(models.Reading)
+        .filter(models.Reading.equipment_id == equipment_id)
+        .order_by(models.Reading.timestamp.desc())
+        .limit(limit)
+        .all()
+    )
+    return readings
+
